@@ -106,6 +106,7 @@ class SettingsAdapter : JsonAdapter<Map<String, Value<Any>>>() {
                             reader.skipValue()
                             nullToken = true
                         }
+                        else -> {}
                     }
                 }
             }

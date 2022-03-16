@@ -1,5 +1,5 @@
 group 'chat.rocket.sdk'
-version '0.1-SNAPSHOT'
+version '0.2'
 
 apply from: rootProject.file('dependencies.gradle')
 

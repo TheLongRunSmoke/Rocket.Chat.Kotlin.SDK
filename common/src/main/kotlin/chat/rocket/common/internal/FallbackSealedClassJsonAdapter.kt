@@ -19,11 +19,10 @@ package chat.rocket.common.internal
  */
 
 import com.squareup.moshi.*
-
+import com.squareup.moshi.JsonAdapter.Factory
 import java.io.IOException
 import java.lang.reflect.Constructor
 import java.lang.reflect.Field
-import java.util.LinkedHashMap
 
 /**
  * [JsonAdapter] that fallbacks to a default class type declared in the sealed class annotated
@@ -31,9 +30,11 @@ import java.util.LinkedHashMap
  *
  *
  */
-class FallbackSealedClassJsonAdapter<T>(private val classType: Class<T>,
-                                        fallback: String,
-                                        fieldName: String) : JsonAdapter<T>() {
+class FallbackSealedClassJsonAdapter<T>(
+    private val classType: Class<T>,
+    fallback: String,
+    fieldName: String
+) : JsonAdapter<T>() {
     private val fallbackConstant: Class<out T>
     private val fallbackConstructor: Constructor<out T>
     private val nameConstantMap: Map<String, Class<out T>>
@@ -82,7 +83,9 @@ class FallbackSealedClassJsonAdapter<T>(private val classType: Class<T>,
     override fun fromJson(reader: JsonReader): T? {
         val name = reader.nextString()
         val constant = nameConstantMap[name]
-        return constant?.newInstance() ?: fallbackConstructor.newInstance(name)
+        return constant?.getDeclaredConstructor()?.newInstance() ?: fallbackConstructor.newInstance(
+            name
+        )
     }
 
     @Throws(IOException::class)
@@ -114,15 +117,20 @@ class FallbackSealedClassJsonAdapter<T>(private val classType: Class<T>,
         /**
          * Builds an adapter that can process sealed classes annotated with [FallbackSealedClass].
          */
-        val ADAPTER_FACTORY: Factory = Factory { type, annotations, moshi ->
+        val ADAPTER_FACTORY: Factory = Factory { type, annotations, _ ->
             if (annotations.isNotEmpty()) return@Factory null
 
             val rawType = Types.getRawType(type)
-            val annotation = rawType.getAnnotation(FallbackSealedClass::class.java) ?: return@Factory null
+            val annotation =
+                rawType.getAnnotation(FallbackSealedClass::class.java) ?: return@Factory null
 
 
-            return@Factory FallbackSealedClassJsonAdapter(rawType, annotation.name, annotation.fieldName)
-                    .nullSafe()
+            return@Factory FallbackSealedClassJsonAdapter(
+                rawType,
+                annotation.name,
+                annotation.fieldName
+            )
+                .nullSafe()
 
         }
     }

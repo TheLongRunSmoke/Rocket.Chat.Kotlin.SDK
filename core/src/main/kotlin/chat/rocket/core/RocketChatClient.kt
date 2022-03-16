@@ -27,6 +27,7 @@ import chat.rocket.core.model.Myself
 import chat.rocket.core.model.Room
 import chat.rocket.core.model.url.MetaJsonAdapter
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.security.InvalidParameterException
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
@@ -62,8 +63,9 @@ class RocketChatClient private constructor(
         .add(java.lang.Long::class.java, ISO8601Date::class.java, TimestampAdapter(CalendarISO8601Converter()))
         .add(Long::class.java, ISO8601Date::class.java, TimestampAdapter(CalendarISO8601Converter()))
         // XXX - MAKE SURE TO KEEP CommonJsonAdapterFactory and CoreJsonAdapterFactory as the latest Adapters...
-        .add(CommonJsonAdapterFactory.INSTANCE)
-        .add(CoreJsonAdapterFactory.INSTANCE)
+        .add(CommonJsonAdapterFactory)
+        .add(CoreJsonAdapterFactory)
+        .addLast(KotlinJsonAdapterFactory())
         .build()
 
     internal lateinit var restUrl: HttpUrl

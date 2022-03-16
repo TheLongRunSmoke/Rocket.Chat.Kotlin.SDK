@@ -28,11 +28,11 @@ fun <T> callback(
     return Call(job)
 }
 
-@UseExperimental(InternalCoroutinesApi::class)
+@OptIn(InternalCoroutinesApi::class)
 private class CallbackCoroutine<in T>(
     parentContext: CoroutineContext,
     private val callback: Callback<T>
-) : AbstractCoroutine<T>(parentContext, true) {
+) : AbstractCoroutine<T>(parentContext, true, true) {
 
     override fun onCompleted(value: T) {
         callback.onSuccess(value)

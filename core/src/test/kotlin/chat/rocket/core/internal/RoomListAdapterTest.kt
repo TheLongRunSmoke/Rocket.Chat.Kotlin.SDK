@@ -47,4 +47,4 @@ class RoomListAdapterTest {
     }
 }
 
-const val ROOMS_TEST = "[{\"_id\":\"GENERAL\",\"t\":\"c\"},{\"_id\":\"GENERAL2\",\"t\":\"p\"},{\"_id\":\"GENERAL3\",\"t\":\"l\"},{\"_id\":\"GENERAL4\",\"t\":\"v\"},{\"_id\":\"GENERAL5\"},{\"t\":\"c\"}]"
+const val ROOMS_TEST = "[{\"_id\":\"GENERAL\",\"t\":\"c\"},{\"_id\":\"GENERAL2\",\"t\":\"p\"},{\"_id\":\"GENERAL3\",\"t\":\"l\"},{\"_id\":\"GENERAL4\",\"t\":\"v\"},{\"_id\":\"GENERAL5\", \"t\":\"c\"}]"
